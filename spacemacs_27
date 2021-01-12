@@ -32,18 +32,18 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(protobuf
-     python
-     react
-     yaml
-     nginx
-     systemd
-     prettier
+   '(
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
+
+     python
+     react
+     yaml
+     nginx
+     systemd
 
      (auto-completion :variables
                       auto-completion-return-key-behavior 'complete
@@ -64,11 +64,10 @@ This function should only modify configuration layer settings."
      theming
      treemacs
 
-     ;; (docker :variables
-     ;;         docker-dockerfile-backend 'lsp)
-     docker
+     (docker :variables
+             docker-dockerfile-backend 'lsp)
      (lsp :variables
-          lsp-restart 'auto-restart
+          ;;lsp-restart 'auto-restart
           lsp-headerline-breadcrumb-enable t
           lsp-lens-enable t
           lsp-modeline-diagnostics-enable t
@@ -77,16 +76,16 @@ This function should only modify configuration layer settings."
           lsp-modeline-code-actions-segments '(count icon))
 
      (org :variables
-          org-enable-org-journal-support t
+          ;; auto install ox-gfm & co
           org-enable-github-support t
+          ;; auto install ox-twbs
+          org-enable-bootstrap-support t
+          ;; auto install org-reveal
           org-enable-reveal-js-support t
-          org-projectile-file "TODOs.org")
+          ;; enable org journal
+          org-enable-org-journal-support t
 
-     ;; (dap :variables
-     ;;                                    ; don't display the mouse buttons
-     ;;      dap-enable-ui-controls nil
-     ;;                                    ; use the auto-configure layout, but no mouse buttons
-     ;;      dap-auto-configure-features '(sessions locals breakpoints expressions tooltip))
+          org-projectile-file "TODOs.org")
 
      (unicode-fonts :variables
                     unicode-fonts-enable-ligatures t
@@ -150,9 +149,8 @@ This function should only modify configuration layer settings."
 
      ;; my-spaceline
      my-olivetti
-     ;; git compat :(
-     ;; my-eyeliner
-     );; end config-layer
+
+     ) ;; end config-layer
 
 
    ;; List of additional packages that will be installed without being wrapped
@@ -164,10 +162,7 @@ This function should only modify configuration layer settings."
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(
-                                      org-bullets
-                                      ;; olivetti
-                                      ;; eterm-256color
-                                      )
+                                      org-bullets)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -277,7 +272,7 @@ It should only modify the values of Spacemacs settings."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner 'random
 
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
@@ -285,9 +280,9 @@ It should only modify the values of Spacemacs settings."
    ;; `recents' `bookmarks' `projects' `agenda' `todos'.
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
-   dotspacemacs-startup-lists '((recents . 5)
+   dotspacemacs-startup-lists '((todos . 5)
                                 (projects . 5)
-                                (todos . 5))
+                                (recents . 5))
 
    ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
@@ -302,11 +297,11 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil, *scratch* buffer will be persistent. Things you write down in
    ;; *scratch* buffer will be saved and restored automatically.
-   dotspacemacs-scratch-buffer-persistent t
+   dotspacemacs-scratch-buffer-persistent nil
 
    ;; If non-nil, `kill-buffer' on *scratch* buffer
    ;; will bury it instead of killing.
-   dotspacemacs-scratch-buffer-unkillable t
+   dotspacemacs-scratch-buffer-unkillable nil
 
    ;; Initial message in the scratch buffer, such as "Welcome to Spacemacs!"
    ;; (default nil)
@@ -317,8 +312,6 @@ It should only modify the values of Spacemacs settings."
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(apropospriate-dark
                          apropospriate-light
-                         light-soap
-                         sanityinc-solarized-light
                          spacemacs-dark
                          spacemacs-light)
 
@@ -330,22 +323,21 @@ It should only modify the values of Spacemacs settings."
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
    dotspacemacs-mode-line-theme '(all-the-icons
-                                  :separator none
-                                  :separator-scale 1.3
-                                  )
+                                  :separator-scale 1.7
+                                  :separator arrow)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
 
-   ;; Default font or prioritized list of fonts.
+   ;; Default font or prioritized list of fonts. The `:size' can be specified as
+   ;; a non-negative integer (pixel size), or a floating-point (point size).
+   ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("Fira Code Retina"
+                               ;;"Source Code Pro"
                                :size 11.0
                                :weight normal
-                               :width normal
-                               ;; :powerline-scale 1.5
-                               ;; :powerline-offset 1.3
-                               )
+                               :width normal)
 
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
@@ -608,7 +600,6 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  ;; (setq exec-path-from-shell-arguments '("-l"))
   )
 
 (defun dotspacemacs/user-load ()
@@ -625,23 +616,24 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
-
-  ;; increare gc
-  ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
-  (setq gc-cons-threshold 100000000)
+                                        ; lsp opti
+                                        ; https://emacs-lsp.github.io/lsp-mode/page/performance/
+  ;;
+  ;; increase gc - commented out cause computer to freeze
+  ;; (setq gc-cons-threshold 100000000)
+  ;; max process
   ;;(setq read-process-output-max (* 1024 1024)) ;; 1mb
 
+
   (setq
+   ;; fix projectile sub module issues
    ;; https://github.com/bbatsov/projectile/issues/1302
    projectile-git-submodule-command nil
    ;; no symlinks question prompted
    vc-follow-symlinks t
    ;; stop lockfile
    create-lockfiles nil
-
-   ;;   spaceline-all-the-icons-separator-scale 1.8
    )
-
 
   ;; shortcut bs-show
   (global-set-key
@@ -664,81 +656,71 @@ before packages are loaded."
    shell-command-switch "-ic")
   ;; make sure env is eterm-256color
   (add-hook 'term-mode-hook #'xterm-256color)
-                                        ; git
-
   ;; stop echo of cmd ?
   (with-eval-after-load "shell"
     (setq explicit-/usr/bin/zsh-args '("/q"))
     (defun my-comint-init ()
       (setq comint-process-echoes t))
-    (add-hook 'comint-mode-hook 'my-comint-init)
-    )
+    (add-hook 'comint-mode-hook 'my-comint-init))
 
+                                        ; git
   (setq magit-repository-directories '("~/repos/"))
   ;; enable speed git mode
   (global-git-commit-mode t)
 
-
-
                                         ; mode line
-  (setq
-   display-time-24hr-format t
-   ;; add seconds
-    display-time-format "%H:%M:%S"
-    ;; update every second
-    display-time-interval 1
-    ;; don't show load average
-    display-time-default-load-average nil
-    ;; don't show mail
-    display-time-mail-string "")
-  ;; show time in mode line on startup
-  (display-time-mode 1)
-  ;; display battery info
-  ;; (spacemacs/toggle-mode-line-battery-on)
-  ;; wrap line by default
-  (global-visual-line-mode 1)
-  ;; highlight line over 80 col
-  ;;(spacemacs/toggle-highlight-long-lines)
+  ;; (setq
+  ;;  display-time-24hr-format t
+  ;;  ;; add seconds
+  ;;  display-time-format "%H:%M:%S"
+  ;;  ;; update every second
+  ;;  display-time-interval 1
+  ;;  ;; don't show load average
+  ;;  display-time-default-load-average nil
+  ;;  ;; don't show mail
+  ;;  display-time-mail-string "")
+  ;; ;; show time in mode line on startup
+  ;; (display-time-mode 1)
+  ;; ;; display battery info
+  ;; ;; (spacemacs/toggle-mode-line-battery-on)
+  ;; ;; wrap line by default
+  ;; (global-visual-line-mode 1)
+  ;; ;; highlight line over 80 col
+  ;; ;;(spacemacs/toggle-highlight-long-lines)
 
+                                        ; lsp
   ;; since gopls v0.5.1-> fix that nest go.mod
   ;; https://github.com/golang/tools/releases/tag/gopls%2Fv0.5.1
   (with-eval-after-load 'lsp-mode
-    (setq
+  (setq
+   ;; disable file watcher
+   lsp-enable-file-watchers nil
 
-     ;; disable file watcher
-     lsp-enable-file-watchers nil
+                                        ; lsp opti
+                                        ; https://emacs-lsp.github.io/lsp-mode/page/performance/
+   lsp-completion-provider :capf
+   ;; diable log
+   lsp-log-io nil ; if set to true can cause a performance hit
 
-     ;;
-     ;; gopls
-     ;;
+   ;;
+   ;; gopls
+   ;;
 
-     ;; gc detail in code lens
-     lsp-gopls-codelens-gc-details t
-     ;; enable statis check
-     lsp-gopls-static-check t
-     ;; more logs
-     lsp-gopls-verboseOutput t
-     ;; debug portal
-     lsp-gopls-server-args '("serve" "--debug=localhost:6060"))
+   ;; gc detail in code lens
+   ;; lsp-gopls-codelens-gc-details t
+   ;; enable statis check
+   lsp-gopls-static-check t
+   ;; more logs
+   ;; lsp-gopls-verboseOutput t
+   ;; debug portal
+   lsp-gopls-server-args '("serve" "--debug=localhost:6060"))
 
+  (lsp-register-custom-settings
+   '(("gopls.experimentalWorkspaceModule" t t)))
+  ) ;; end after lsp-mode
 
-    (dolist (dir '(
-                   "[/\\\\].git$"
-                   "[/\\\\]node_modules$"
-                   "[/\\\\]vendor$"
-                   ))
-
-      (push dir lsp-file-watch-ignored))
-
-
-    (lsp-register-custom-settings
-     '(("gopls.experimentalWorkspaceModule" t t))))
-
-
-
-                                        ; org
-  ;; src following:
-  ;; https://out-of-cheese-error.netlify.app/spacemacs-config
+  ;; org
+  ;; src: https://out-of-cheese-error.netlify.app/spacemacs-config
   (with-eval-after-load "org"
 
     ;; color font and stuffs: https://zzamboni.org/post/beautifying-org-mode-in-emacs/
@@ -767,18 +749,17 @@ before packages are loaded."
      org-hierarchical-checkbox-statistics nil
 
      org-todo-hierarchical-statistics nil
-     org-hierarchical-todo-statistics nil
-
-     )
+     org-hierarchical-todo-statistics nil)
 
     (setq
-     ;; https://www.reddit.com/r/spacemacs/comments/hakh9c/changing_org_bullet_list/
      org-superstar-headline-bullets-list '("◉" "○" "▲" "▶" "■" "◆")
 
-     org-agenda-files (list "~/repo/TODOs/TODOs.org"
-                            "~/repo/xmloredis/TODOs.org"
-                            "~/repo/licensetool/TODOs.org"
-                            "~/repo/webfmwk/TODOs.org"
+     org-journal-dir "/home/master/.org/journal/"
+
+     org-agenda-files (list "/home/master/repo/TODOs/TODOs.org"
+                            "/home/master/repo/xmloredis/TODOs.org"
+                            "/home/master/repo/licensetool/TODOs.org"
+                            "/home/master/repo/webfmwk/TODOs.org"
                             )
 
      ;; load *.org recursively
@@ -830,12 +811,20 @@ before packages are loaded."
     ;; end setq
     );; end eval-after-load org
 
+  ;; auto add todo to agenda
+  ;; (with-eval-after-load 'org-agenda
+  ;;   (require 'org-projectile)
+  ;;   (mapcar '(lambda (file)
+  ;;              (when (file-exists-p file)
+  ;;                (push file org-agenda-files)))
+  ;;           (org-projectile-todo-files)))
+
   (add-hook 'text-mode-hook (lambda ()
                               (interactive)
                               (message "Olivetti text-mode-hook")
                               (olivetti-set-width 81)
                               (hidden-mode-line-mode)
-                              (spacemacs/toggle-vi-tilde-fringe-off)
+                              ;;(spacemacs/toggle-vi-tilde-fringe-off)
                               (olivetti-mode 1)))
   ;; (add-hook 'prog-mode-hook (lambda ()
   ;;                             (interactive)
@@ -845,34 +834,19 @@ before packages are loaded."
   ;;                             (spacemacs/toggle-vi-tilde-fringe-off)
   ;;                             (olivetti-mode 1)))
 
+  ;; fix tramp hanging because of projectile indexing
+  ;; https://sideshowcoder.com/2017/10/24/projectile-and-tramp/
+  (defadvice projectile-on (around exlude-tramp activate)
+    "This should disable projectile when visiting a remote file"
+    (unless  (--any? (and it (file-remote-p it))
+                     (list
+                      (buffer-file-name)
+                      list-buffers-directory
+                      default-directory
+                      dired-directory))
+      ad-do-it))
+  (setq projectile-mode-line "Projectile")
 
-  ;; This is needed to avoid slowdown when working with remote files.
-  (defadvice projectile-project-root (around ignore-remote first activate)
-    (unless (file-remote-p default-directory) ad-do-it))
-
-  (with-eval-after-load "projectile"
-
-    ;; This is needed to avoid slowdown when working with remote files.
-    (defadvice projectile-project-root (around ignore-remote first activate)
-      (unless (file-remote-p default-directory) ad-do-it))
-
-    ;; ;; src: https://sideshowcoder.com/2017/10/24/projectile-and-tramp/
-    ;;   ;; disable projcetile over tramp
-    ;;   (defadvice projectile-on (around exlude-tramp activate)
-    ;;     "This should disable projectile when visiting a remote file"
-    ;;     (unless  (--any? (and it (file-remote-p it))
-    ;;                      (list
-    ;;                       (buffer-file-name)
-    ;;                       list-buffers-directory
-    ;;                       default-directory
-    ;;                       dired-directory))
-    ;;       ad-do-it))
-    ;;   (setq projectile-mode-line "Projectile"))
-    )
-
-
-  ;; Always open compilation buffers in the same window.
-  ;; src: https://emacs.stackexchange.com/questions/31761/how-to-use-a-separate-window-for-compilation-output
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -887,38 +861,11 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#272b34" "#c60013" "#8cc610" "#eea806" "#088afb" "#ec3691" "#1ee079" "#f6f2f3"])
  '(evil-want-Y-yank-to-eol nil)
- '(hl-todo-keyword-faces
-   '(("TODO" . "#dc752f")
-     ("NEXT" . "#dc752f")
-     ("THEM" . "#2d9574")
-     ("PROG" . "#3a81c3")
-     ("OKAY" . "#3a81c3")
-     ("DONT" . "#f2241f")
-     ("FAIL" . "#f2241f")
-     ("DONE" . "#42ae2c")
-     ("NOTE" . "#b1951d")
-     ("KLUDGE" . "#b1951d")
-     ("HACK" . "#b1951d")
-     ("TEMP" . "#b1951d")
-     ("FIXME" . "#dc752f")
-     ("XXX+" . "#dc752f")
-     ("\\?\\?\\?+" . "#dc752f")))
  '(org-agenda-files
-   '("~/repo/todos/TODOs.org" "~/repo/xmloredis/TODOs.org" "~/repo/licensetool/TODOs.org"))
+   '("~/repo/todos/TODOs.org" "~/repo/sbc/src/goministrator/TODOs.org" "/home/master/repo/xmloredis/TODOs.org" "/home/master/repo/licensetool/TODOs.org"))
  '(package-selected-packages
-   '(anaconda-mode pythonic alect-themes projectile eterm-256color xterm-color vterm terminal-here shell-pop multi-term eshell-z eshell-prompt-extras esh-help org-category-capture alert log4e gntp htmlize wakatime-mode unkillable-scratch ucs-utils font-utils treemacs-magit persistent-soft pcache persistent-scratch magit-popup origami skewer-mode simple-httpd hierarchy json-mode json-snatcher json-reformat multiple-cursors js2-mode gitignore-mode fringe-helper git-gutter+ ghub closql emacsql-sqlite emacsql treepy flyspell-correct magit git-commit with-editor transient php-mode posframe lsp-treemacs bui ycmd request-deferred deferred rtags pos-tip go-mode company lsp-mode markdown-mode dash-functional yasnippet auto-complete ws-butler writeroom-mode visual-fill-column winum volatile-highlights vi-tilde-fringe uuidgen undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired symon symbol-overlay string-inflection restart-emacs rainbow-delimiters popwin persp-mode password-generator paradox open-junk-file move-text lorem-ipsum link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-purpose window-purpose imenu-list google-translate golden-ratio flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens smartparens evil-args evil-anzu anzu eval-sexp-fu editorconfig dumb-jump devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol aggressive-indent ace-link font-lock+ yasnippet-snippets yapfify which-key web-beautify vmd-mode use-package unicode-fonts unfill toc-org sphinx-doc spaceline-all-the-icons smeargle pytest pyenv-mode py-isort prettier-js pippel pipenv pip-requirements phpunit phpcbf php-auto-yasnippets pcre2el ox-gfm overseer orgit org-superstar org-rich-yank org-re-reveal org-projectile org-present org-pomodoro org-mime org-journal org-download org-cliplink org-bullets org-brain olivetti oldlace-theme nodejs-repl neotree nameless mwim mmm-mode markdown-toc magit-svn magit-section magit-gitflow macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami livid-mode live-py-mode ligature json-navigator js2-refactor js-doc importmagic hybrid-mode helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-gitignore helm-git-grep helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-c-style godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ gh-md fuzzy forge flyspell-popup flyspell-correct-helm flycheck-ycmd flycheck-rtags flycheck-pos-tip flycheck-package flycheck-golangci-lint flycheck-elsa evil-org evil-magit emr emojify emoji-cheat-sheet-plus elisp-slime-nav drupal-mode dotenv-mode dockerfile-mode docker disaster diminish dap-mode cython-mode cpp-auto-include company-ycmd company-statistics company-rtags company-quickhelp company-go company-emoji company-c-headers company-anaconda ccls browse-at-remote blacken bind-map auto-yasnippet auto-dictionary auto-compile apropospriate-theme add-node-modules-path ace-jump-helm-line ac-ispell))
- '(pdf-view-midnight-colors '("#655370" . "#fbf8ef"))
- '(wakatime-python-bin nil)
- '(when
-      (or
-       (not
-        (boundp 'ansi-term-color-vector))
-       (not
-        (facep
-         (aref ansi-term-color-vector 0))))))
+   '(ox-twbs org-bullets apropospriate-theme yasnippet-snippets yapfify yaml-mode xterm-color web-beautify wakatime-mode vterm vmd-mode unicode-fonts ucs-utils font-utils unfill treemacs-magit terminal-here systemd sphinx-doc smeargle shell-pop rjsx-mode pytest pyenv-mode py-isort prettier-js pippel pipenv pyvenv pip-requirements phpunit phpcbf php-auto-yasnippets persistent-soft pcache ox-gfm orgit org-rich-yank org-re-reveal org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-journal org-download org-cliplink org-brain olivetti nodejs-repl nginx-mode mwim multi-term mmm-mode markdown-toc magit-svn magit-section magit-gitflow magit-popup lsp-ui lsp-python-ms lsp-pyright lsp-origami origami livid-mode skewer-mode simple-httpd live-py-mode ligature json-navigator hierarchy js2-refactor multiple-cursors js2-mode js-doc importmagic epc ctable concurrent htmlize helm-rtags helm-pydoc helm-org-rifle helm-lsp helm-gitignore helm-git-grep helm-company helm-c-yasnippet google-c-style godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ fringe-helper git-gutter+ gh-md fuzzy forge ghub closql emacsql-sqlite emacsql treepy flyspell-popup flyspell-correct-helm flyspell-correct flycheck-ycmd flycheck-rtags flycheck-pos-tip flycheck-golangci-lint evil-org evil-magit magit git-commit with-editor eshell-z eshell-prompt-extras esh-help emojify emoji-cheat-sheet-plus drupal-mode php-mode dockerfile-mode docker transient tablist json-mode docker-tramp json-snatcher json-reformat disaster dap-mode posframe lsp-treemacs bui cython-mode cpp-auto-include company-ycmd ycmd request-deferred deferred company-statistics company-rtags rtags company-quickhelp pos-tip company-go go-mode company-emoji company-c-headers company-anaconda company ccls lsp-mode markdown-mode dash-functional browse-at-remote blacken auto-yasnippet yasnippet auto-dictionary anaconda-mode pythonic add-node-modules-path ac-ispell auto-complete ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe valign uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired toc-org symon symbol-overlay string-inflection spaceline-all-the-icons restart-emacs request rainbow-delimiters popwin pcre2el password-generator paradox overseer org-superstar open-junk-file nameless move-text macrostep lorem-ipsum link-hint indent-guide hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio font-lock+ flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav editorconfig dumb-jump dotenv-mode dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -1,1 +1,1 @@
-spacemacs_full
+spacemacs_27
