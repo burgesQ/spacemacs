@@ -70,7 +70,7 @@ This function should only modify configuration layer settings."
      (lsp :variables
           ;;lsp-restart 'auto-restart
           lsp-headerline-breadcrumb-enable t
-          lsp-lens-enable t
+          ;; lsp-lens-enable t
           lsp-modeline-diagnostics-enable t
           ;; default segments
           ;; lsp-diagnostics-provider 'none
@@ -689,6 +689,12 @@ before packages are loaded."
   ;; ;; highlight line over 80 col
   ;; ;;(spacemacs/toggle-highlight-long-lines)
 
+  (setq
+   company-lsp-cache-candidates auto
+   lsp-enable-file-watchers nil
+   lsp-completion-provider :capf
+   lsp-log-io nil)
+
                                         ; lsp
   ;; since gopls v0.5.1-> fix that nest go.mod
   ;; https://github.com/golang/tools/releases/tag/gopls%2Fv0.5.1
@@ -710,11 +716,12 @@ before packages are loaded."
    ;; gc detail in code lens
    ;; lsp-gopls-codelens-gc-details t
    ;; enable statis check
-   lsp-gopls-static-check t
+   ;; lsp-gopls-static-check t
    ;; more logs
    ;; lsp-gopls-verboseOutput t
    ;; debug portal
-   lsp-gopls-server-args '("serve" "--debug=localhost:6060"))
+   ;; lsp-gopls-server-args '("serve" "--debug=localhost:6060")
+   )
 
   (lsp-register-custom-settings
    '(("gopls.experimentalWorkspaceModule" t t)))
@@ -824,6 +831,7 @@ before packages are loaded."
   (add-to-list 'auto-mode-alist '("\\.tmpl\\'" . js-mode))
   (add-to-list 'auto-mode-alist '("\\.conf.tmpl\\'" . js-mode))
 
+
   (add-hook 'text-mode-hook (lambda ()
                               (interactive)
                               (message "Olivetti text-mode-hook")
@@ -874,7 +882,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol nil)
  '(org-agenda-files
-   '("/home/master/repo/webfmwk/TODOs.org" "/home/master/repo/licensetool/TODOs.org" "~/repo/todos/TODOs.org" "~/repo/sbc/src/abc-monitor-gui/Moki/TODOs.org" "/home/master/repo/xmloredis/TODOs.org"))
+   '("~/repo/todos/TODOs.org" "/home/master/repo/webfmwk/TODOs.org" "/home/master/repo/licensetool/TODOs.org" "/home/master/repo/xmloredis/TODOs.org" "~/repo/sbc/src/abc-monitor-gui/Moki/TODOs.org"))
  '(package-selected-packages
    '(web-mode tagedit slim-mode scss-mode sass-mode pug-mode impatient-mode helm-css-scss haml-mode emmet-mode counsel-css counsel swiper ivy company-web web-completion-data helm-ctest cmake-mode ox-twbs org-bullets apropospriate-theme yasnippet-snippets yapfify yaml-mode xterm-color web-beautify wakatime-mode vterm vmd-mode unicode-fonts ucs-utils font-utils unfill treemacs-magit terminal-here systemd sphinx-doc smeargle shell-pop rjsx-mode pytest pyenv-mode py-isort prettier-js pippel pipenv pyvenv pip-requirements phpunit phpcbf php-auto-yasnippets persistent-soft pcache ox-gfm orgit org-rich-yank org-re-reveal org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-journal org-download org-cliplink org-brain olivetti nodejs-repl nginx-mode mwim multi-term mmm-mode markdown-toc magit-svn magit-section magit-gitflow magit-popup lsp-ui lsp-python-ms lsp-pyright lsp-origami origami livid-mode skewer-mode simple-httpd live-py-mode ligature json-navigator hierarchy js2-refactor multiple-cursors js2-mode js-doc importmagic epc ctable concurrent htmlize helm-rtags helm-pydoc helm-org-rifle helm-lsp helm-gitignore helm-git-grep helm-company helm-c-yasnippet google-c-style godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ fringe-helper git-gutter+ gh-md fuzzy forge ghub closql emacsql-sqlite emacsql treepy flyspell-popup flyspell-correct-helm flyspell-correct flycheck-ycmd flycheck-rtags flycheck-pos-tip flycheck-golangci-lint evil-org evil-magit magit git-commit with-editor eshell-z eshell-prompt-extras esh-help emojify emoji-cheat-sheet-plus drupal-mode php-mode dockerfile-mode docker transient tablist json-mode docker-tramp json-snatcher json-reformat disaster dap-mode posframe lsp-treemacs bui cython-mode cpp-auto-include company-ycmd ycmd request-deferred deferred company-statistics company-rtags rtags company-quickhelp pos-tip company-go go-mode company-emoji company-c-headers company-anaconda company ccls lsp-mode markdown-mode dash-functional browse-at-remote blacken auto-yasnippet yasnippet auto-dictionary anaconda-mode pythonic add-node-modules-path ac-ispell auto-complete ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe valign uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired toc-org symon symbol-overlay string-inflection spaceline-all-the-icons restart-emacs request rainbow-delimiters popwin pcre2el password-generator paradox overseer org-superstar open-junk-file nameless move-text macrostep lorem-ipsum link-hint indent-guide hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio font-lock+ flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav editorconfig dumb-jump dotenv-mode dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line)))
 (custom-set-faces
