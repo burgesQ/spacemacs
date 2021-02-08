@@ -10,6 +10,3 @@
 ;;; License: GPLv3
 
 ;; Variables
-
-(defvar org-enable-valign t
-  "If non-nil, enable valign-mode in org-mode buffers.")
