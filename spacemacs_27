@@ -32,7 +32,9 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(html
+   '(protobuf
+     rust
+     html
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -146,7 +148,8 @@ This function should only modify configuration layer settings."
          go-format-before-save t
          gofmt-command "goimports"
          go-use-golangci-lint t
-         go-tab-width 2)
+         go-tab-width 2
+         )
 
      ;; my-spaceline
      my-olivetti
@@ -312,8 +315,6 @@ It should only modify the values of Spacemacs settings."
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(apropospriate-dark
-                         apropospriate-light
-                         spacemacs-dark
                          spacemacs-light)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
@@ -335,8 +336,7 @@ It should only modify the values of Spacemacs settings."
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("Fira Code Retina"
-                               ;;"Source Code Pro"
-                               :size 11.0
+                               :size 13.0
                                :weight normal
                                :width normal)
 
@@ -682,15 +682,16 @@ before packages are loaded."
   ;;  display-time-mail-string "")
   ;; ;; show time in mode line on startup
   ;; (display-time-mode 1)
-  ;; ;; display battery info
-  ;; ;; (spacemacs/toggle-mode-line-battery-on)
+  ;; display battery info
+  ;; (spacemacs/toggle-mode-line-battery-on)
   ;; ;; wrap line by default
   ;; (global-visual-line-mode 1)
   ;; ;; highlight line over 80 col
-  ;; ;;(spacemacs/toggle-highlight-long-lines)
+  ;; (spacemacs/highlight-long-lines)
+  ;; )
 
   (setq
-   company-lsp-cache-candidates auto
+   company-lsp-cache-candidates 'auto
    lsp-enable-file-watchers nil
    lsp-completion-provider :capf
    lsp-log-io nil)
@@ -835,23 +836,16 @@ before packages are loaded."
   (add-hook 'text-mode-hook (lambda ()
                               (interactive)
                               (message "Olivetti text-mode-hook")
-                              (olivetti-set-width 81)
+                              (olivetti-set-width 82)
                               (hidden-mode-line-mode)
-                              ;;(spacemacs/toggle-vi-tilde-fringe-off)
+                              (spacemacs/toggle-spelling-checking)
+                              ;; (spacemacs/toggle-highlight-long-lines)
                               (olivetti-mode 1)))
 
-  (add-hook 'text-mode-hook (lambda ()
+  (add-hook 'prog-mode-hook (lambda ()
                               (interactive)
-                              (message "Enable spell checking")
-                              (spacemacs/toggle-spelling-checking)))
-
-  ;; (add-hook 'prog-mode-hook (lambda ()
-  ;;                             (interactive)
-  ;;                             (message "Olivetti prog-mode-hook")
-  ;;                             (olivetti-set-width 81)
-  ;;                             (hidden-mode-line-mode)
-  ;;                             (spacemacs/toggle-vi-tilde-fringe-off)
-  ;;                             (olivetti-mode 1)))
+                              ;; (spacemacs/toggle-highlight-long-lines)
+                              ))
 
   ;; fix tramp hanging because of projectile indexing
   ;; https://sideshowcoder.com/2017/10/24/projectile-and-tramp/
@@ -866,6 +860,15 @@ before packages are loaded."
       ad-do-it))
   (setq projectile-mode-line "Projectile")
 
+  ;; open compilation always same windows
+  ;; https://emacs.stackexchange.com/questions/21389/how-can-i-pin-the-compilation-buffer-to-never-leave-a-single-frame-window
+  (push '("\\*compilation\\*" . (nil (reusable-frames . t))) display-buffer-alist)
+  ;; open compilation on right screen
+  ;; https://stackoverflow.com/questions/44761194/how-can-i-make-the-spacemacs-compilation-buffer-split-horizontally
+  (defadvice compile (around split-horizontally activate)
+    (let ((split-width-threshold 0)
+          (split-height-threshold nil))
+      ad-do-it))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -882,9 +885,10 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol nil)
  '(org-agenda-files
-   '("~/repo/todos/TODOs.org" "/home/master/repo/webfmwk/TODOs.org" "/home/master/repo/licensetool/TODOs.org" "/home/master/repo/xmloredis/TODOs.org"))
+   '("/home/master/repo/webfmwk/TODOs.org" "~/repo/todos/TODOs.org" "~/repo/jwt/TODOs.org" "~/repo/sbc/src/restify/TODOs.org" "/home/master/repo/licensetool/TODOs.org" "/home/master/repo/xmloredis/TODOs.org"))
  '(package-selected-packages
-   '(web-mode tagedit slim-mode scss-mode sass-mode pug-mode impatient-mode helm-css-scss haml-mode emmet-mode counsel-css counsel swiper ivy company-web web-completion-data helm-ctest cmake-mode ox-twbs org-bullets apropospriate-theme yasnippet-snippets yapfify yaml-mode xterm-color web-beautify wakatime-mode vterm vmd-mode unicode-fonts ucs-utils font-utils unfill treemacs-magit terminal-here systemd sphinx-doc smeargle shell-pop rjsx-mode pytest pyenv-mode py-isort prettier-js pippel pipenv pyvenv pip-requirements phpunit phpcbf php-auto-yasnippets persistent-soft pcache ox-gfm orgit org-rich-yank org-re-reveal org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-journal org-download org-cliplink org-brain olivetti nodejs-repl nginx-mode mwim multi-term mmm-mode markdown-toc magit-svn magit-section magit-gitflow magit-popup lsp-ui lsp-python-ms lsp-pyright lsp-origami origami livid-mode skewer-mode simple-httpd live-py-mode ligature json-navigator hierarchy js2-refactor multiple-cursors js2-mode js-doc importmagic epc ctable concurrent htmlize helm-rtags helm-pydoc helm-org-rifle helm-lsp helm-gitignore helm-git-grep helm-company helm-c-yasnippet google-c-style godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ fringe-helper git-gutter+ gh-md fuzzy forge ghub closql emacsql-sqlite emacsql treepy flyspell-popup flyspell-correct-helm flyspell-correct flycheck-ycmd flycheck-rtags flycheck-pos-tip flycheck-golangci-lint evil-org evil-magit magit git-commit with-editor eshell-z eshell-prompt-extras esh-help emojify emoji-cheat-sheet-plus drupal-mode php-mode dockerfile-mode docker transient tablist json-mode docker-tramp json-snatcher json-reformat disaster dap-mode posframe lsp-treemacs bui cython-mode cpp-auto-include company-ycmd ycmd request-deferred deferred company-statistics company-rtags rtags company-quickhelp pos-tip company-go go-mode company-emoji company-c-headers company-anaconda company ccls lsp-mode markdown-mode dash-functional browse-at-remote blacken auto-yasnippet yasnippet auto-dictionary anaconda-mode pythonic add-node-modules-path ac-ispell auto-complete ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe valign uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired toc-org symon symbol-overlay string-inflection spaceline-all-the-icons restart-emacs request rainbow-delimiters popwin pcre2el password-generator paradox overseer org-superstar open-junk-file nameless move-text macrostep lorem-ipsum link-hint indent-guide hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio font-lock+ flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav editorconfig dumb-jump dotenv-mode dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line)))
+   '(protobuf-mode toml-mode ron-mode racer flycheck-rust cargo rust-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode impatient-mode helm-css-scss haml-mode emmet-mode counsel-css counsel swiper ivy company-web web-completion-data helm-ctest cmake-mode ox-twbs org-bullets apropospriate-theme yasnippet-snippets yapfify yaml-mode xterm-color web-beautify wakatime-mode vterm vmd-mode unicode-fonts ucs-utils font-utils unfill treemacs-magit terminal-here systemd sphinx-doc smeargle shell-pop rjsx-mode pytest pyenv-mode py-isort prettier-js pippel pipenv pyvenv pip-requirements phpunit phpcbf php-auto-yasnippets persistent-soft pcache ox-gfm orgit org-rich-yank org-re-reveal org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-journal org-download org-cliplink org-brain olivetti nodejs-repl nginx-mode mwim multi-term mmm-mode markdown-toc magit-svn magit-section magit-gitflow magit-popup lsp-ui lsp-python-ms lsp-pyright lsp-origami origami livid-mode skewer-mode simple-httpd live-py-mode ligature json-navigator hierarchy js2-refactor multiple-cursors js2-mode js-doc importmagic epc ctable concurrent htmlize helm-rtags helm-pydoc helm-org-rifle helm-lsp helm-gitignore helm-git-grep helm-company helm-c-yasnippet google-c-style godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ fringe-helper git-gutter+ gh-md fuzzy forge ghub closql emacsql-sqlite emacsql treepy flyspell-popup flyspell-correct-helm flyspell-correct flycheck-ycmd flycheck-rtags flycheck-pos-tip flycheck-golangci-lint evil-org evil-magit magit git-commit with-editor eshell-z eshell-prompt-extras esh-help emojify emoji-cheat-sheet-plus drupal-mode php-mode dockerfile-mode docker transient tablist json-mode docker-tramp json-snatcher json-reformat disaster dap-mode posframe lsp-treemacs bui cython-mode cpp-auto-include company-ycmd ycmd request-deferred deferred company-statistics company-rtags rtags company-quickhelp pos-tip company-go go-mode company-emoji company-c-headers company-anaconda company ccls lsp-mode markdown-mode dash-functional browse-at-remote blacken auto-yasnippet yasnippet auto-dictionary anaconda-mode pythonic add-node-modules-path ac-ispell auto-complete ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe valign uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired toc-org symon symbol-overlay string-inflection spaceline-all-the-icons restart-emacs request rainbow-delimiters popwin pcre2el password-generator paradox overseer org-superstar open-junk-file nameless move-text macrostep lorem-ipsum link-hint indent-guide hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio font-lock+ flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav editorconfig dumb-jump dotenv-mode dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line))
+ '(wakatime-python-bin nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
